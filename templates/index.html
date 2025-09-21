@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Novel Translator - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary mb-3">
+                <i class="fas fa-language me-3"></i>
+                Novel Translator
+            </h1>
+            <p class="lead text-muted mb-4">
+                Translate your novels and chapters with AI-powered ONNX models while preserving emotional context and maintaining consistency across your work.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Chapter Translation Card -->
+            <div class="col-md-6">
+                <div class="card h-100 shadow-lg translation-card">
+                    <div class="card-header bg-gradient text-white text-center py-4">
+                        <div class="feature-icon bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                            <i class="fas fa-file-text fa-2x text-white"></i>
+                        </div>
+                        <h3 class="card-title mb-0">Chapter Translation</h3>
+                    </div>
+                    <div class="card-body d-flex flex-column p-4">
+                        <p class="card-text flex-grow-1">
+                            Translate individual chapters or text passages. Perfect for quick translations or when working on specific sections of your novel.
+                        </p>
+                        <div class="feature-list mb-4">
+                            <div class="feature-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Upload text files or paste content directly
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Side-by-side comparison view
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Automatic language detection
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Emotion preservation technology
+                            </div>
+                        </div>
+                        <a href="/chapter" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-play me-2"></i>
+                            Start Chapter Translation
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Translation Card -->
+            <div class="col-md-6">
+                <div class="card h-100 shadow-lg translation-card">
+                    <div class="card-header bg-gradient-novel text-white text-center py-4">
+                        <div class="feature-icon bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                            <i class="fas fa-book fa-2x text-white"></i>
+                        </div>
+                        <h3 class="card-title mb-0">Novel Translation</h3>
+                    </div>
+                    <div class="card-body d-flex flex-column p-4">
+                        <p class="card-text flex-grow-1">
+                            Translate entire novels by uploading ZIP files containing all chapters. Maintains consistency and context across the entire work.
+                        </p>
+                        <div class="feature-list mb-4">
+                            <div class="feature-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Batch processing of multiple chapters
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Glossary consistency management
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Progress tracking for large projects
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Download translated ZIP archive
+                            </div>
+                        </div>
+                        <a href="/novel" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-upload me-2"></i>
+                            Start Novel Translation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Why Choose Our Translator?</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-brain fa-2x"></i>
+                            </div>
+                            <h4>AI-Powered Translation</h4>
+                            <p class="text-muted">Advanced ONNX models provide high-quality, contextually accurate translations</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-heart fa-2x"></i>
+                            </div>
+                            <h4>Emotion Preservation</h4>
+                            <p class="text-muted">Maintains the emotional tone and intent of your original work</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="feature-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-sync-alt fa-2x"></i>
+                            </div>
+                            <h4>Consistency Management</h4>
+                            <p class="text-muted">Glossary system ensures character names and terms remain consistent</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supported Languages -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Supported Languages</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="language-item">
+                                    <i class="fas fa-flag me-2 text-primary"></i>
+                                    <strong>English</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="language-item">
+                                    <i class="fas fa-flag me-2 text-danger"></i>
+                                    <strong>Spanish</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="language-item">
+                                    <i class="fas fa-flag me-2 text-info"></i>
+                                    <strong>French</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="language-item">
+                                    <i class="fas fa-flag me-2 text-warning"></i>
+                                    <strong>German</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="language-item">
+                                    <i class="fas fa-flag me-2 text-success"></i>
+                                    <strong>Italian</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="language-item">
+                                    <i class="fas fa-flag me-2 text-secondary"></i>
+                                    <strong>Portuguese</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="language-item">
+                                    <i class="fas fa-flag me-2 text-dark"></i>
+                                    <strong>Japanese</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="language-item">
+                                    <i class="fas fa-flag me-2 text-primary"></i>
+                                    <strong>Korean</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

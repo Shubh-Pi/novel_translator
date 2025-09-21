@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block title %}Novel Translation - Novel Translator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold text-success mb-3">
+                <i class="fas fa-book me-3"></i>
+                Novel Translation
+            </h1>
+            <p class="lead text-muted">
+                Translate entire novels with consistency management and context preservation
+            </p>
+        </div>
+
+        <!-- Upload Form -->
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-upload me-2"></i>
+                    Upload Your Novel
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data" id="novelForm">
+                    <!-- File Upload Section -->
+                    <div class="mb-4">
+                        <label for="file" class="form-label">
+                            <i class="fas fa-file-archive me-2"></i>
+                            Novel ZIP File
+                        </label>
+                        <div class="upload-area-large" id="uploadArea">
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt fa-4x text-muted mb-4"></i>
+                                <h4>Drop your ZIP file here</h4>
+                                <p class="text-muted mb-4">
+                                    Upload a ZIP file containing all your chapter text files (.txt)
+                                </p>
+                                <input type="file" class="form-control" id="file" name="file" accept=".zip" required style="display: none;">
+                                <button type="button" class="btn btn-success btn-lg" onclick="document.getElementById('file').click()">
+                                    <i class="fas fa-folder-open me-2"></i>
+                                    Choose ZIP File
+                                </button>
+                            </div>
+                        </div>
+                        <div class="file-info mt-3" id="fileInfo" style="display: none;">
+                            <div class="alert alert-success">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-file-archive fa-2x me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1" id="fileName">No file selected</h6>
+                                        <small class="text-muted" id="fileSize">0 KB</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="alert alert-info mb-4">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>
+                            ZIP File Requirements
+                        </h6>
+                        <ul class="mb-0">
+                            <li>Each chapter should be a separate .txt file</li>
+                            <li>Files will be processed in alphabetical order</li>
+                            <li>Use consistent naming (e.g., "Chapter_01.txt", "Chapter_02.txt")</li>
+                            <li>Maximum file size: 100MB</li>
+                        </ul>
+                    </div>
+
+                    <!-- Language Selection -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="target_lang" class="form-label">
+                                <i class="fas fa-language me-2"></i>
+                                Target Language
+                            </label>
+                            <select class="form-select form-select-lg" id="target_lang" name="target_lang" required>
+                                <option value="">Select target language...</option>
+                                {% for code, name in languages.items() %}
+                                <option value="{{ code }}">{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <button type="submit" class="btn btn-success btn-lg w-100" id="translateBtn">
+                                <i class="fas fa-magic me-2"></i>
+                                Start Novel Translation
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Progress Section (hidden by default) -->
+        <div class="card shadow-lg mt-4" id="progressCard" style="display: none;">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-cogs me-2"></i>
+                    Translation in Progress
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="progress mb-3" style="height: 25px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="progressBar">
+                        <span class="fw-bold">0%</span>
+                    </div>
+                </div>
+                <p class="mb-0 text-center" id="progressText">
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    Preparing translation...
+                </p>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-center mb-4">Novel Translation Features</h3>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="feature-icon bg-primary text-white">
+                                <i class="fas fa-sort-alpha-down"></i>
+                            </div>
+                            <h5>Batch Processing</h5>
+                            <p class="text-muted">
+                                Automatically processes all chapters in your ZIP file in the correct order
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="feature-icon bg-success text-white">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <h5>Glossary Management</h5>
+                            <p class="text-muted">
+                                Maintains consistency for character names and terms across all chapters
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="feature-icon bg-info text-white">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h5>Emotion Preservation</h5>
+                            <p class="text-muted">
+                                Preserves the emotional tone and style throughout the entire novel
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="feature-icon bg-warning text-white">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <h5>Organized Output</h5>
+                            <p class="text-muted">
+                                Downloads as a ZIP file with the same structure as your original novel
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('file');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const form = document.getElementById('novelForm');
+    const translateBtn = document.getElementById('translateBtn');
+    const progressCard = document.getElementById('progressCard');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+
+    // File drag and drop
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0 && files[0].name.endsWith('.zip')) {
+            fileInput.files = files;
+            handleFileSelect();
+        } else {
+            alert('Please drop a ZIP file.');
+        }
+    });
+
+    uploadArea.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', handleFileSelect);
+
+    function handleFileSelect() {
+        const file = fileInput.files[0];
+        if (file) {
+            if (!file.name.endsWith('.zip')) {
+                alert('Please select a ZIP file.');
+                fileInput.value = '';
+                return;
+            }
+            
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.style.display = 'block';
+        } else {
+            fileInfo.style.display = 'none';
+        }
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            e.preventDefault();
+            alert('Please select a ZIP file to upload.');
+            return;
+        }
+        
+        if (file.size > 100 * 1024 * 1024) { // 100MB limit
+            e.preventDefault();
+            alert('File size exceeds 100MB limit.');
+            return;
+        }
+        
+        // Show progress
+        translateBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Starting Translation...';
+        translateBtn.disabled = true;
+        
+        // Show progress card
+        progressCard.style.display = 'block';
+        
+        // Simulate progress (in real implementation, this would be WebSocket or polling)
+        simulateProgress();
+    });
+
+    function simulateProgress() {
+        let progress = 0;
+        const interval = setInterval(function() {
+            progress += Math.random() * 10;
+            if (progress > 90) {
+                progress = 90; // Don't complete until actual completion
+            }
+            
+            updateProgress(progress, 'Processing chapters...');
+        }, 500);
+        
+        // This would be replaced with actual progress tracking
+        setTimeout(function() {
+            clearInterval(interval);
+        }, 10000);
+    }
+
+    function updateProgress(percent, message) {
+        progressBar.style.width = percent + '%';
+        progressBar.innerHTML = '<span class="fw-bold">' + Math.round(percent) + '%</span>';
+        progressText.innerHTML = '<i class="fas fa-cogs me-2"></i>' + message;
+    }
+});
+</script>
+{% endblock %}

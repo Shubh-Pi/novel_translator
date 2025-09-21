@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}Chapter Translation - Novel Translator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold text-primary mb-3">
+                <i class="fas fa-file-text me-3"></i>
+                Chapter Translation
+            </h1>
+            <p class="lead text-muted">
+                Translate individual chapters or text passages with emotion preservation
+            </p>
+        </div>
+
+        {% if not original_text %}
+        <!-- Input Form -->
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-upload me-2"></i>
+                    Input Your Text
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data" id="chapterForm">
+                    <div class="row g-4">
+                        <!-- File Upload Section -->
+                        <div class="col-md-6">
+                            <div class="upload-section">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-file-upload me-2"></i>
+                                    Upload Text File
+                                </h5>
+                                <div class="upload-area" id="uploadArea">
+                                    <div class="upload-content">
+                                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                        <p class="mb-2"><strong>Drop your text file here</strong></p>
+                                        <p class="text-muted small mb-3">or click to browse</p>
+                                        <input type="file" class="form-control" id="file" name="file" accept=".txt,.text" style="display: none;">
+                                        <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('file').click()">
+                                            <i class="fas fa-folder-open me-2"></i>
+                                            Choose File
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="file-info mt-3" id="fileInfo" style="display: none;">
+                                    <div class="alert alert-info mb-0">
+                                        <i class="fas fa-file-text me-2"></i>
+                                        <span id="fileName">No file selected</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Text Input Section -->
+                        <div class="col-md-6">
+                            <div class="text-section">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-keyboard me-2"></i>
+                                    Or Paste Text Directly
+                                </h5>
+                                <textarea class="form-control" id="text_input" name="text_input" rows="8" 
+                                          placeholder="Paste your chapter text here..."></textarea>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    You can either upload a file or paste text directly
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Language Selection -->
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <label for="target_lang" class="form-label">
+                                <i class="fas fa-language me-2"></i>
+                                Target Language
+                            </label>
+                            <select class="form-select form-select-lg" id="target_lang" name="target_lang" required>
+                                <option value="">Select target language...</option>
+                                {% for code, name in languages.items() %}
+                                <option value="{{ code }}">{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary btn-lg w-100" id="translateBtn">
+                                <i class="fas fa-language me-2"></i>
+                                Translate Chapter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <!-- Translation Results -->
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="translation-info mb-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <h6 class="text-muted mb-1">Source Language</h6>
+                                    <span class="badge bg-info fs-6">{{ source_lang }}</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-muted mb-1">Target Language</h6>
+                                    <span class="badge bg-success fs-6">{{ target_lang }}</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-muted mb-1">Word Count</h6>
+                                    <span class="badge bg-secondary fs-6">{{ original_text.split()|length }} words</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Original Text -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-file-text me-2"></i>
+                            Original Text
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-content" style="max-height: 500px; overflow-y: auto;">
+                            {{ original_text|replace('\n', '<br>')|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Translated Text -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-language me-2"></i>
+                            Translated Text
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-content" style="max-height: 500px; overflow-y: auto;">
+                            {{ translated_text|replace('\n', '<br>')|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="text-center">
+                    <form method="post" action="/download-chapter" class="d-inline-block me-3">
+                        <input type="hidden" name="text" value="{{ translated_text }}">
+                        <input type="hidden" name="filename" value="translated_chapter.txt">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-download me-2"></i>
+                            Download Translation
+                        </button>
+                    </form>
+                    <a href="/chapter" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>
+                        Translate Another Chapter
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('file');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const textInput = document.getElementById('text_input');
+    const form = document.getElementById('chapterForm');
+    const translateBtn = document.getElementById('translateBtn');
+
+    // File drag and drop
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFileSelect();
+        }
+    });
+
+    uploadArea.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', handleFileSelect);
+
+    function handleFileSelect() {
+        const file = fileInput.files[0];
+        if (file) {
+            fileName.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            fileInfo.style.display = 'block';
+            
+            // Clear text input when file is selected
+            textInput.value = '';
+        } else {
+            fileInfo.style.display = 'none';
+        }
+    }
+
+    // Clear file input when text is entered
+    textInput.addEventListener('input', function() {
+        if (textInput.value.trim()) {
+            fileInput.value = '';
+            fileInfo.style.display = 'none';
+        }
+    });
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        const hasFile = fileInput.files.length > 0;
+        const hasText = textInput.value.trim().length > 0;
+        
+        if (!hasFile && !hasText) {
+            e.preventDefault();
+            alert('Please either upload a file or paste text to translate.');
+            return;
+        }
+        
+        translateBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Translating...';
+        translateBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %}
